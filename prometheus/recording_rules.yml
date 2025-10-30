@@ -1,0 +1,64 @@
+# Prometheus Recording Rules
+# These rules pre-compute frequently used or expensive queries
+
+groups:
+  - name: system_recording_rules
+    interval: 30s
+    rules:
+      # CPU Usage by Instance
+      - record: instance:node_cpu_utilisation:rate5m
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)
+
+      # Memory Usage by Instance
+      - record: instance:node_memory_utilisation:ratio
+        expr: 1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)
+
+      # Disk Usage by Instance
+      - record: instance:node_disk_utilisation:ratio
+        expr: 1 - (node_filesystem_avail_bytes{mountpoint="/"} / node_filesystem_size_bytes{mountpoint="/"})
+
+      # Network Receive Rate
+      - record: instance:node_network_receive_bytes:rate5m
+        expr: rate(node_network_receive_bytes_total[5m])
+
+      # Network Transmit Rate
+      - record: instance:node_network_transmit_bytes:rate5m
+        expr: rate(node_network_transmit_bytes_total[5m])
+
+  - name: application_recording_rules
+    interval: 30s
+    rules:
+      # Request Rate
+      - record: job:http_requests:rate5m
+        expr: sum by(job) (rate(http_requests_total[5m]))
+
+      # Error Rate
+      - record: job:http_errors:rate5m
+        expr: sum by(job) (rate(http_requests_total{status=~"5.."}[5m]))
+
+      # Error Percentage
+      - record: job:http_error_percentage:rate5m
+        expr: (sum by(job) (rate(http_requests_total{status=~"5.."}[5m])) / sum by(job) (rate(http_requests_total[5m]))) * 100
+
+      # Average Response Time
+      - record: job:http_request_duration:avg5m
+        expr: avg by(job) (rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]))
+
+  - name: container_recording_rules
+    interval: 30s
+    rules:
+      # Container CPU Usage
+      - record: container:cpu_usage:rate5m
+        expr: rate(container_cpu_usage_seconds_total{container!=""}[5m]) * 100
+
+      # Container Memory Usage
+      - record: container:memory_usage:ratio
+        expr: container_memory_usage_bytes{container!=""} / container_spec_memory_limit_bytes{container!=""}
+
+      # Container Network Receive Rate
+      - record: container:network_receive_bytes:rate5m
+        expr: rate(container_network_receive_bytes_total{container!=""}[5m])
+
+      # Container Network Transmit Rate
+      - record: container:network_transmit_bytes:rate5m
+        expr: rate(container_network_transmit_bytes_total{container!=""}[5m])

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .link-card {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .link-card a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔍 Prometheus & Grafana Monitoring System</h1>
+        <p>Complete monitoring solution for server infrastructure</p>
+    </div>
+    
+    <div class="container">
+        <h2>Welcome to Your Monitoring Dashboard</h2>
+        <p>Access your monitoring tools using the links below:</p>
+        
+        <div class="links">
+            <div class="link-card">
+                <h3>📊 Grafana</h3>
+                <a href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open Grafana</a>
+                <p>Username: admin<br>Password: admin123</p>
+            </div>
+            
+            <div class="link-card">
+                <h3>🔥 Prometheus</h3>
+                <a href="http://localhost:9090" target="_blank" rel="noopener noreferrer">Open Prometheus</a>
+                <p>Query and explore metrics</p>
+            </div>
+            
+            <div class="link-card">
+                <h3>🚨 Alertmanager</h3>
+                <a href="http://localhost:9093" target="_blank" rel="noopener noreferrer">Open Alertmanager</a>
+                <p>Manage alerts</p>
+            </div>
+            
+            <div class="link-card">
+                <h3>📈 Node Exporter</h3>
+                <a href="http://localhost:9100/metrics" target="_blank" rel="noopener noreferrer">View Metrics</a>
+                <p>System metrics endpoint</p>
+            </div>
+            
+            <div class="link-card">
+                <h3>🐳 cAdvisor</h3>
+                <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">Open cAdvisor</a>
+                <p>Container metrics</p>
+            </div>
+            
+            <div class="link-card">
+                <h3>🌐 Nginx Status</h3>
+                <a href="http://localhost/stub_status" target="_blank" rel="noopener noreferrer">View Status</a>
+                <p>Nginx stub status</p>
+            </div>
+        </div>
+        
+        <div class="status">
+            <strong>✅ System Status:</strong> All services are running and monitored!
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+# Prometheus Configuration File
+global:
+  scrape_interval: 15s # Default scraping interval
+  evaluation_interval: 15s # Evaluate rules every 15 seconds
+  external_labels:
+    cluster: 'monitoring-cluster'
+    environment: 'production'
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager:9093
+
+# Load alerting rules
+rule_files:
+  - 'alerts.yml'
+  - 'recording_rules.yml'
+
+# Scrape configurations
+scrape_configs:
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          service: 'prometheus'
+
+  # Node Exporter - System Metrics
+  - job_name: 'node-exporter'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['node-exporter:9100']
+        labels:
+          service: 'system-metrics'
+          instance: 'main-server'
+
+  # cAdvisor - Container Metrics
+  - job_name: 'cadvisor'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          service: 'container-metrics'
+
+  # Nginx Exporter
+  - job_name: 'nginx'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['nginx-exporter:9113']
+        labels:
+          service: 'nginx'
+          instance: 'web-server'
+
+  # Alertmanager
+  - job_name: 'alertmanager'
+    static_configs:
+      - targets: ['alertmanager:9093']
+        labels:
+          service: 'alertmanager'
+
+  # Custom Application Exporter
+  - job_name: 'app-metrics'
+    scrape_interval: 10s
+    static_configs:
+      - targets: ['app-exporter:3001']
+        labels:
+          service: 'custom-app'
+          environment: 'production'
+
+  # Example: MySQL Exporter (uncomment when needed)
+  # - job_name: 'mysql'
+  #   static_configs:
+  #     - targets: ['mysql-exporter:9104']
+  #       labels:
+  #         service: 'mysql'
+
+  # Example: MongoDB Exporter (uncomment when needed)
+  # - job_name: 'mongodb'
+  #   static_configs:
+  #     - targets: ['mongodb-exporter:9216']
+  #       labels:
+  #         service: 'mongodb'
+
+  # Example: Redis Exporter (uncomment when needed)
+  # - job_name: 'redis'
+  #   static_configs:
+  #     - targets: ['redis-exporter:9121']
+  #       labels:
+  #         service: 'redis'

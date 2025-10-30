@@ -1,0 +1,34 @@
+# Docker volumes
+prometheus_data/
+grafana_data/
+alertmanager_data/
+
+# Node modules
+node_modules/
+app-exporter/node_modules/
+
+# Environment files
+.env
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+backups/
+*.backup
+*.bak
+
+# Temporary files
+tmp/
+temp/

@@ -1,0 +1,125 @@
+{
+  "dashboard": {
+    "title": "Application Metrics Dashboard",
+    "tags": ["application", "performance"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "type": "graph",
+        "title": "Request Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "Requests/sec - {{job}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"}
+        ]
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "type": "graph",
+        "title": "Error Rate",
+        "targets": [
+          {
+            "expr": "(rate(http_requests_total{status=~\"5..\"}[5m]) / rate(http_requests_total[5m])) * 100",
+            "legendFormat": "Error Rate % - {{job}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Error %"}
+        ]
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Response Time (95th Percentile)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "95th Percentile - {{job}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Response Time"}
+        ]
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "graph",
+        "title": "Active Users",
+        "targets": [
+          {
+            "expr": "active_users",
+            "legendFormat": "Active Users"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16},
+        "type": "stat",
+        "title": "Total Requests (1h)",
+        "targets": [
+          {
+            "expr": "sum(increase(http_requests_total[1h]))"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16},
+        "type": "stat",
+        "title": "Average Response Time",
+        "targets": [
+          {
+            "expr": "avg(rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]))"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16},
+        "type": "stat",
+        "title": "Current Error Rate",
+        "targets": [
+          {
+            "expr": "(sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))) * 100"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 16},
+        "type": "stat",
+        "title": "Database Connections",
+        "targets": [
+          {
+            "expr": "database_connections"
+          }
+        ]
+      }
+    ]
+  }
+}

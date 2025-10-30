@@ -1,0 +1,137 @@
+{
+  "dashboard": {
+    "title": "System Overview Dashboard",
+    "tags": ["system", "monitoring"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "type": "graph",
+        "title": "CPU Usage",
+        "targets": [
+          {
+            "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+            "legendFormat": "CPU Usage - {{instance}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "CPU %", "max": 100, "min": 0}
+        ]
+      },
+      {
+        "id": 2,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "type": "graph",
+        "title": "Memory Usage",
+        "targets": [
+          {
+            "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+            "legendFormat": "Memory Usage - {{instance}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Memory %", "max": 100, "min": 0}
+        ]
+      },
+      {
+        "id": 3,
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "type": "graph",
+        "title": "Disk Usage",
+        "targets": [
+          {
+            "expr": "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"})) * 100",
+            "legendFormat": "Disk Usage - {{instance}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "label": "Disk %", "max": 100, "min": 0}
+        ]
+      },
+      {
+        "id": 4,
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "type": "graph",
+        "title": "Network Traffic",
+        "targets": [
+          {
+            "expr": "rate(node_network_receive_bytes_total[5m])",
+            "legendFormat": "Receive - {{device}}"
+          },
+          {
+            "expr": "rate(node_network_transmit_bytes_total[5m])",
+            "legendFormat": "Transmit - {{device}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "Bps", "label": "Bytes/sec"}
+        ]
+      },
+      {
+        "id": 5,
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 16},
+        "type": "stat",
+        "title": "CPU Cores",
+        "targets": [
+          {
+            "expr": "count(count(node_cpu_seconds_total) by (cpu))"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 16},
+        "type": "stat",
+        "title": "Total Memory",
+        "targets": [
+          {
+            "expr": "node_memory_MemTotal_bytes / 1024 / 1024 / 1024"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "decgbytes"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 16},
+        "type": "stat",
+        "title": "Total Disk",
+        "targets": [
+          {
+            "expr": "node_filesystem_size_bytes{mountpoint=\"/\"} / 1024 / 1024 / 1024"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "decgbytes"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 16},
+        "type": "stat",
+        "title": "System Uptime",
+        "targets": [
+          {
+            "expr": "node_time_seconds - node_boot_time_seconds"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "dtdurations"
+          }
+        }
+      }
+    ]
+  }
+}
